@@ -104,7 +104,7 @@ const BookServices = () => {
 
                     </View>
                     <View style={styles.btnBtn}>
-                        <Text style={styles.confirmBookingText}>Confirm Booking</Text>
+                        <Text onPress={() => navigation.navigate('Confirm')} style={styles.confirmBookingText}>Confirm Booking</Text>
                     </View>
                 </View>
             </View>

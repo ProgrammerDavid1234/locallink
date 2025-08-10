@@ -23,6 +23,13 @@ const UserProfilePage = () => {
 
     const toggleNotifications = () => setNotificationsEnabled((prev) => !prev);
     const toggleTheme = () => setIsDarkTheme((prev) => !prev);
+    const switchToLight = () => setIsDarkTheme(false);
+    const switchToDark = () => setIsDarkTheme(true);
+    const SettingItem = ({ title, onPress }) => (
+        <TouchableOpacity style={styles.row} onPress={onPress}>
+            <Text style={styles.rowText}>{title}</Text>
+        </TouchableOpacity>
+    );
 
     // Fetch user profile
     useEffect(() => {
@@ -77,7 +84,7 @@ const UserProfilePage = () => {
     }
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
+        <ScrollView contentContainerStyle={[styles.container, { backgroundColor: isDarkTheme ? '#121212' : '#fff' }]}>
             {/* Header */}
             <View style={styles.profileContainer}>
                 <View style={styles.onlyTwo}>
@@ -95,9 +102,9 @@ const UserProfilePage = () => {
             {/* Account Settings */}
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Account Settings</Text>
-                <SettingItem title="Edit Profile" />
-                <SettingItem title="Payment Methods" />
-                <SettingItem title="Invite Friends" />
+                <SettingItem onPress={() => navigation.navigate("EditProfile")}  title="Edit Profile" />
+                <SettingItem onPress={() => navigation.navigate("PaymentMethodsHistory")} title="Payment Methods" />
+                <SettingItem onPress={() => navigation.navigate("InviteFriends")} title="Invite Friends" />
             </View>
 
             {/* App Preferences */}
@@ -140,7 +147,7 @@ const UserProfilePage = () => {
             {/* Support */}
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Support</Text>
-                <SettingItem title="Help & Support" />
+                <SettingItem onPress={() => navigation.navigate("HelpSupport")} title="Help & Support" />
                 <SettingItem title="Rate LocalLink" />
             </View>
 
@@ -173,7 +180,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         gap: 20,
-        alignItems: 'center'
+        alignItems: 'center',
+        
     },
     profileImage: {
         width: 80,
@@ -183,13 +191,14 @@ const styles = StyleSheet.create({
     },
     profileName: {
         fontSize: 20,
-        fontWeight: 'bold',
         color: '#333',
+        fontFamily: 'Poppins_700Bold'
     },
     profileEmail: {
         color: '#666',
         fontSize: 14,
         marginBottom: 10,
+        fontFamily: 'Poppins_400Regular'
     },
     editButton: {
         paddingVertical: 8,
@@ -239,19 +248,23 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     themeButton: {
-        paddingVertical: 6,
+        paddingVertical: 10,
         paddingHorizontal: 14,
         borderWidth: 1,
-        borderColor: '#ccc',
+        borderColor: '#3F370F',
         borderRadius: 6,
+        width: 100,
     },
     activeThemeButton: {
-        backgroundColor: '#1A4BA0',
+        backgroundColor: '#3F370F',
         borderColor: '#1A4BA0',
     },
     themeText: {
         fontWeight: '600',
         color: '#555',
+        textAlign: 'center',
+        fontFamily: 'Poppins_700Bold'
+
     },
     activeThemeText: {
         color: '#fff',

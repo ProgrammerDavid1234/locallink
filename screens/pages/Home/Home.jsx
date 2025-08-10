@@ -6,6 +6,28 @@ const Home = () => {
     const navigation = useNavigation();
     const [services, setServices] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('');
+
+
+    const filteredServices = services.filter(service => {
+        const name = service.businessName?.toLowerCase() || '';
+        const category = service.category?.toLowerCase() || '';
+        const search = searchQuery.toLowerCase();
+        const selected = selectedCategory.toLowerCase();
+
+        // Search query match
+        const matchesSearch = name.includes(search);
+
+        // Category match (check for keyword presence)
+        const matchesCategory = selectedCategory
+            ? category.includes(selected) || name.includes(selected)
+            : true;
+
+        return matchesSearch && matchesCategory;
+    });
+
+
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -52,24 +74,37 @@ const Home = () => {
                         {/* <Image style={styles.topImage} source={require('../../../assets/logo.png')} /> */}
                         <Text style={styles.logoText}>LocalLink</Text>
                     </View>
-                    <Image
-                        source={require('../../../assets/user.png')}
+                    {/* <Image 
+                        onPress={() => navigation.navigate('UserProfilePage')}
+                        source={require('../../../assets/logo.png')}
                         style={styles.logo}
-                    />
+                    /> */}
                 </View>
 
 
-                <View style={styles.search}>
-                    <Image
-                        source={require('../../../assets/search.png')}
-                        style={styles.searchIcon}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="What do you need?"
-                        placeholderTextColor="#aaa"
-                    />
+                <View style={{ flexDirection: 'row', alignItems: 'center', width: '95%' }}>
+                    <View style={[styles.search, { flex: 1, marginRight: 10 }]}>
+                        <Image
+                            source={require('../../../assets/search.png')}
+                            style={styles.searchIcon}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="What do you need?"
+                            placeholderTextColor="#aaa"
+                            value={searchQuery}
+                            onChangeText={(text) => setSearchQuery(text)}
+                        />
+                    </View>
+                    {searchQuery.length > 0 && (
+                        <TouchableOpacity onPress={() => setSearchQuery('')}>
+                            <Text style={{ color: '#3F370F', fontSize: 16, fontFamily: 'Poppins_700Bold' }}>
+                                Cancel
+                            </Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
+
             </View>
 
             <View style={styles.categories}>
@@ -80,52 +115,55 @@ const Home = () => {
                     showsHorizontalScrollIndicator={false}
                     contentContainerStyle={styles.categoriesCircle}
                 >
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => setSelectedCategory('Carpenter')}>
                         <View style={styles.firstCategory}>
-                            <Image style={styles.categoryImage} source={require('../../../assets/carpenter.png')}></Image>
+                            <Image style={styles.categoryImage} source={require('../../../assets/carpenter.png')} />
                             <Text style={styles.categoryText}>Carpenter</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity>
+
+                    <TouchableOpacity onPress={() => setSelectedCategory('Barber')}>
                         <View style={styles.secondCategory}>
                             <Image style={styles.categoryImage} source={require('../../../assets/clippers.png')}></Image>
                             <Text style={styles.categoryText}>Barber</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => setSelectedCategory('Electrician')}>
                         <View style={styles.thirdCategory}>
                             <Image style={styles.categoryImage} source={require('../../../assets/electrician.png')}></Image>
                             <Text style={styles.categoryText}>Electrician</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
-
-                        <View style={styles.fourthCategory}>
+                    <TouchableOpacity onPress={() => setSelectedCategory('Plumbing')}>
+                        <View style={styles.fourthCategory} >
                             <Image style={styles.categoryImage} source={require('../../../assets/plumbling.png')}></Image>
                             <Text style={styles.categoryText}>Plumber</Text>
                         </View>
                     </TouchableOpacity>
 
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => setSelectedCategory('Mechanic')}>
                         <View style={styles.fifthCategory}>
                             <Image style={styles.categoryImage} source={require('../../../assets/mechanic.png')}></Image>
                             <Text style={styles.categoryText}>Mechanic</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity>
-                        <View style={styles.fifthCategory}>
-                            <Image style={styles.categoryImage} source={require('../../../assets/home.png')}></Image>
-                            <Text style={styles.categoryText}>Architect</Text>
+                    <TouchableOpacity onPress={() => setSelectedCategory('Hairdresser')}>
+                        <View style={styles.sixthCategory}>
+                            <Image style={styles.categoryImage} source={require('../../../assets/female.png')}></Image>
+                            <Text style={styles.categoryText}>Hair Dresser</Text>
                         </View>
+
                     </TouchableOpacity>
 
-                    <View style={styles.fifthCategory}>
-                        <Image style={styles.categoryImage} source={require('../../../assets/female.png')}></Image>
-                        <Text style={styles.categoryText}>Hair Dresser</Text>
-                    </View>
 
+                    <TouchableOpacity onPress={() => setSelectedCategory('')}>
+                        <View style={styles.firstCategory}>
+                            <Image style={styles.categoryImage} source={require('../../../assets/female.png')} />
+                            <Text style={styles.categoryText}>All</Text>
+                        </View>
+                    </TouchableOpacity>
 
                 </ScrollView>
             </View>
@@ -136,7 +174,7 @@ const Home = () => {
                 <ScrollView showsVerticalScrollIndicator={false}
                     contentContainerStyle={styles.scrollContainer}>
                     <View style={styles.servicesContainer}>
-                        {services.map((service) => (
+                        {filteredServices.map((service) => (
                             <View key={service._id} style={styles.serviceCard}>
                                 <TouchableOpacity>
                                     <Image
@@ -224,11 +262,11 @@ const styles = StyleSheet.create({
     },
 
     logo: {
-        width: 40,
-        height: 40,
+        width: 80,
+        height: 50,
         resizeMode: 'contain',
         marginBottom: 10,
-        paddingRight: 20,
+        paddingRight: 0,
     },
     search: {
         flexDirection: 'row',
@@ -276,12 +314,10 @@ const styles = StyleSheet.create({
     },
     categoriesCircle: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
         marginTop: 20,
         gap: 10,
     },
     firstCategory: {
-        flex: 1,
         alignItems: 'center',
         marginRight: 10,
     },
@@ -301,6 +337,11 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
     fifthCategory: {
+        flex: 1,
+        alignItems: 'center',
+        marginRight: 10,
+    },
+    sixthCategory: {
         flex: 1,
         alignItems: 'center',
         marginRight: 10,
