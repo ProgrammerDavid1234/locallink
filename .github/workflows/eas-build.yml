@@ -1,0 +1,27 @@
+name: EAS Build
+
+on:
+  workflow_dispatch: # Allows you to manually trigger the build from GitHub
+  push:
+    branches:
+      - main  # or your default branch name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
+      - name: Authenticate with Expo
+        run: eas login --token ${{ secrets.EXPO_TOKEN }}
+
+      - name: Run EAS build
+        run: eas build --platform android --profile production --non-interactive
