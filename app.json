@@ -8,16 +8,18 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "resizeMode": "contain"
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.yourname.locallink"
+      "bundleIdentifier": "com.programmerdavid1234.locallink"
     },
     "android": {
-      "package": "com.yourname.locallink",
+      "package": "com.programmerdavid1234.locallink",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png"
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true
     },
