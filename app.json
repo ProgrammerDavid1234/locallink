@@ -11,9 +11,11 @@
       "resizeMode": "contain"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourname.locallink"
     },
     "android": {
+      "package": "com.yourname.locallink",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png"
       },
