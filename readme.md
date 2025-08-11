@@ -24,3 +24,7 @@ After deploying, view your app at servicelocallink2025-2f445.web.app
 
 Need help? Check out the Hosting docs
 
+
+
+npx eas-cli@latest build:configure
+npx eas-cli@latest build --platform android --profile production
